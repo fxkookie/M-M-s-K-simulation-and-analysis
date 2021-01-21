@@ -56,19 +56,29 @@ public class Station{
     this.mu = mu;
     sta_num = s;
     capacity = k-s;
-    queue = new ArrayDeque(capacity);
-    cur_customer = new Customer[s];
+    if(m == 0){
+      queue = new ArrayDeque(capacity);
+      cur_customer = new Customer[s];
+    }
+    else{
+      capacity = 10000000;
+      queue = new ArrayDeque();
+      cur_customer = new Customer[s];
+    }
 
     arrival_queue  = new ArrayDeque();
     service_queue  = new ArrayDeque();
     // ExponentialDistribution
+    //m
+    elamda = new ExponentialDistribution(1/lamda);
+    //g
+    // ulamda = new UniformIntegerDistribution(0,(int)(120/lamda));
     if(m == 0){
-      elamda = new ExponentialDistribution(1/lamda);
       emu = new ExponentialDistribution(1/mu);
     }
     // UniformIntegerDistribution
     else{
-      ulamda = new UniformIntegerDistribution(0,(int)(120/lamda));
+      // ulamda = new UniformIntegerDistribution(0,(int)(120/lamda));
       umu = new UniformIntegerDistribution(0, (int)(120/mu));
     }
     double arrival_last = 0;
@@ -86,6 +96,7 @@ public class Station{
       customer_num++;
       // double a = elamda.sample() * 60;
       if(m == 0){
+        // p = ulamda.sample();
         p = elamda.sample() * 60;
         // p = exp(lamda) * 60;
         avg += p;
@@ -94,7 +105,10 @@ public class Station{
         ttt += new_service;
       }
       else{
-        arrival_last += ulamda.sample();
+        p = elamda.sample() * 60;
+        // p = ulamda.sample();
+        avg += p;
+        arrival_last += p;
         new_service = umu.sample();
       }
       // avg += new_service;

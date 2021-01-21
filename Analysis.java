@@ -34,9 +34,9 @@ public class Analysis{
     this.m = 1;
     this.s = 1;
     this.lo = lamda/mu;
-    this.sigma = Math.pow((2*lamda),2) / 12;
-    // this.lo = 1/mu;
-    this.p0 = 1-lo;
+    this.sigma = (2/mu) * (2/mu) / 12;
+    // System.out.printf("%.2f\n",sigma);
+    // this.p0 = 1-lo;
     this.lq = cal_lq();
     this.ls = cal_ls();
     this.wq = cal_wq();
@@ -48,7 +48,11 @@ public class Analysis{
       sum += ( Math.pow(lo,i) / factorial(i) );
     }
     double temp = Math.pow(lo,s) / factorial(s);
-    double temp2 = (1-Math.pow( (lo/s),k-s+1)) / (1-(lo / s));
+    double temp2 = 0;
+    for(int j = s;j < k+1 ;j++){
+      temp2 += Math.pow( lamda / (s * mu) ,(j-s));
+    }
+    // double temp2 = (1-Math.pow( (lo/s),k-s+1)) / (1-(lo / s));
     sum += temp * temp2;
     return 1/sum;
   }
@@ -58,8 +62,11 @@ public class Analysis{
       if(n < s){
         return (Math.pow(lo,n)/factorial(n)) * p0;
       }
-      else{
+      else if(n <= k){
         return (Math.pow(lo,n)/ (factorial(s) * Math.pow(s,n-s)) ) * p0;
+      }
+      else{
+        return 0;
       }
     }
     else{
@@ -77,7 +84,9 @@ public class Analysis{
       return res;
     }
     else{
-      return ((lamda * lamda * sigma) + Math.pow(lo,2)) / (2*(1-lo));
+      double temp = 1-lo;
+      double temp2 = lamda * lamda * this.sigma;
+      return (temp2 + (lo * lo)) / (2 * temp);
     }
   }
 
