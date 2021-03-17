@@ -44,8 +44,8 @@ public class Main{
     double a_ws = a.ws * 60;
     double a_lq = a.lq;
     double a_ls = a.ls;
-    // System.out.printf("avg: %.5f\n", ( (double)s.drop / (double)s.customer_num));
-    // System.out.println("======================================");
+    System.out.printf("avg: %.5f\n", ( (double)s.drop / (double)s.customer_num));
+    System.out.println("======================================");
     System.out.printf("lamda: %.2f and mu: %.2f\n", lamda, mu);
     System.out.printf("a_wq: %.4f, s_wq: %.4f\n", a_wq, s_wq);
     System.out.printf("a_ws: %.4f, s_ws: %.4f\n", a_ws, s_ws);

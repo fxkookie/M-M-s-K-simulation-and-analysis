@@ -22,8 +22,6 @@ public class Station{
   public double before_time;
   public double before_time_all;
 
-
-
   public double avg;
   public double ttt;
   public int zero_count;
@@ -69,10 +67,11 @@ public class Station{
     arrival_queue  = new ArrayDeque();
     service_queue  = new ArrayDeque();
     // ExponentialDistribution
-    //m
+    //m distribution
     elamda = new ExponentialDistribution(1/lamda);
-    //g
+    //g distribution
     // ulamda = new UniformIntegerDistribution(0,(int)(120/lamda));
+
     if(m == 0){
       emu = new ExponentialDistribution(1/mu);
     }
@@ -89,7 +88,6 @@ public class Station{
     double p = 0;
 
     for(;;){
-      // System.out.printf("%.2f\n",arrival_last);
       if(arrival_last >= system_time){
         break;
       }
@@ -114,9 +112,7 @@ public class Station{
       // avg += new_service;
       arrival_queue.add(arrival_last);
       service_queue.add(new_service);
-      // System.out.printf("%.3f  %.3f  %.3f\n",p,arrival_last,new_service);
     }
-    // System.out.printf("%.3f %f\n",avg/n, n);
   }
   //when the customer comes, it will call this func to put in the waiting queue.
   //Return False if the queue is full, otherwise return true.
@@ -142,16 +138,12 @@ public class Station{
     }
     drop++;
   }
-  // public void putServer(Customer c,double arr, double ser){
-  //   c = new Customer(arr,ser);
-  // }
 
   public void run(){
     double cur = 0;
     double min = 0;
     serverBusy = false;
     boolean arr_emp = false;
-    // System.out.printf("%f\n",system_time);
     do{
       double next_arrival = 0;
       arr_emp = arrival_queue.isEmpty();
@@ -159,14 +151,10 @@ public class Station{
           next_arrival = (double)arrival_queue.peek();
           min = next_arrival;
       }
-      // System.out.printf("round min: %.2f and cur: %.2f\n",min,cur);
-      // System.out.printf("nextround min: %.2f and cur: %.2f\n",min,cur);
       double now_customertime;
       if(serverBusy){
         for(int i = 0;i<sta_num;i++){
-          // System.out.printf("yes1!\n");
           if(cur_customer[i] != null){
-            // System.out.printf("yes!\n");
             now_customertime = cur_customer[i].depart_time;
             if(arr_emp){
               min = now_customertime;
@@ -177,13 +165,11 @@ public class Station{
           }
         }
       }
-      // System.out.printf("min: %.2f\n",min);
-      // System.out.printf("//\n");
       for(int i = 0;i<sta_num;i++){
         if(cur_customer[i] != null){
           now_customertime = cur_customer[i].depart_time;
+          // the packet in the station is the next target
           if(now_customertime == min){
-            // System.out.printf("station %d win! and now is:%f \n",i,min);
             finish++;
             wq += cur_customer[i].waiting_time;
             ws += cur_customer[i].dwell_time;
@@ -203,16 +189,12 @@ public class Station{
         }
       }
       if (!arr_emp){
+        //the coming packet is the next target
         if(next_arrival == min){
-          // System.out.printf("event win! and now is:%f \n",min);
-          // System.out.printf("before:%f\n",arrival_queue.peek());
           add((double)arrival_queue.poll(), (double)service_queue.poll(), min);
-          // System.out.printf("after:%f\n",arrival_queue.peek());
         }
       }
       cur = min;
-      // System.out.printf("out");
-      // System.exit(0);
       serverBusy = false;
       for(int i = 0; i < sta_num;i++){
         if(cur_customer[i] != null){
@@ -222,15 +204,6 @@ public class Station{
       system_time = cur;
     }while( !arrival_queue.isEmpty() || !queue.isEmpty() ||  serverBusy);
 
-    // for(int i = 0;i<sta_num;i++){
-    //   if(cur_customer[i] != null){
-    //     wq += cur_customer[i].unfinished_waiting_time(system_time);
-    //   }
-    // }
-    // while(!queue.isEmpty()){
-    //   System.out.printf("in");
-    //   wq += ((Customer)queue.poll()).unfinished_waiting_time(system_time);
-    // }
 
   }
   public void update_ls(double time){
@@ -241,7 +214,6 @@ public class Station{
     double z = Math.random();
     double x = -(1 / lamda) * Math.log(z);
     return x;
-
   }
 
 }

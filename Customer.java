@@ -13,9 +13,8 @@ public class Customer{
     service_time = ser;
     in_queue = arrival_time;
   }
-  // public void inQ(double time){
-  //   in_queue = arrival_time;
-  // }
+
+  // into station
   public void inS(double time, int index){
     in_service = time;
     if(index == 0){
@@ -27,8 +26,10 @@ public class Customer{
     dwell_time = waiting_time + service_time;
     depart_time = in_service + service_time;
   }
+
   public double unfinished_waiting_time(double time){
     waiting_time = time - in_queue;
     return waiting_time;
   }
+
 }

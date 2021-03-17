@@ -16,6 +16,7 @@ public class Analysis{
   double pn;
   double sigma;
   double lamdaeff;
+  // M/M/s/K
   public Analysis(double lamda, double mu, int s, int k){
     this.lamda = lamda;
     this.mu = mu;
@@ -28,6 +29,7 @@ public class Analysis{
     this.lq = cal_lq();
     this.ls = cal_ls();
   }
+  // M/M/1
   public Analysis(double lamda, double mu){
     this.lamda = lamda;
     this.mu = mu;
@@ -52,7 +54,6 @@ public class Analysis{
     for(int j = s;j < k+1 ;j++){
       temp2 += Math.pow( lamda / (s * mu) ,(j-s));
     }
-    // double temp2 = (1-Math.pow( (lo/s),k-s+1)) / (1-(lo / s));
     sum += temp * temp2;
     return 1/sum;
   }
